@@ -1,5 +1,5 @@
 from bottle import TEMPLATE_PATH, route, static_file, template, install
-from models import Apod
+from apod import Apod
 
 TEMPLATE_PATH.append("./app/templates")
 
