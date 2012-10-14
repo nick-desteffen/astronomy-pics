@@ -1,15 +1,16 @@
 from bottle import TEMPLATE_PATH, route, static_file, template, install
-from bottle_mongo import MongoPlugin
-from models import *
+from models import Apod
 
 TEMPLATE_PATH.append("./app/templates")
-
-plugin = MongoPlugin(uri="mongodb://localhost:27020", db="astronomy_pics", json_mongo=True)
-install(plugin)
 
 @route('/')
 def index():
   return template('index.tpl')
+
+@route('/apod/:date')
+def apod(date):
+  apod = Apod(date)
+  return {"title": apod.title}
 
 @route('/assets/<filepath:path>')
 def server_asset(filepath):
