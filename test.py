@@ -1,8 +1,8 @@
 from app import models
-from app.models import Apod
+from app.apod import Apod
 
-apod = Apod('121009')
+apod = Apod('121005')
 
-print apod.title
-print apod.explanation
-print apod.high_res_image_path
+# print apod.title
+# print apod.explanation
+# print apod.high_res_image_path

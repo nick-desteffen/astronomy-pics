@@ -17,8 +17,8 @@ class Apod:
       id = apod_collection.insert(self.scrape_apod(date))
       apod = apod_collection.find_one({"_id": id})
 
-    self.source_html = apod['source_html']
     self.title = apod['title']
+    self.image_credit = apod['image_credit']
     self.high_res_image_path = apod['high_res_image_path']
     self.low_res_image_path = apod['low_res_image_path']
     self.explanation = apod['explanation']
@@ -54,17 +54,25 @@ class Apod:
     ## Find the title
     title = centers[1].find_all("b")[0].text.strip()
 
-    ## Find the explanation
-    explanation = paragraphs[2]
+    ## Find the image credit and cleanup
+    centers[1].b.extract() ## Remove Title
+    centers[1].b.unwrap() ## Remove other bold tags
+    image_credit = centers[1].renderContents()
+    image_credit = re.sub("<br>", "", image_credit) ## Remove line breaks
+    image_credit = re.sub("</br>", "", image_credit)
+
+    ## Find the explanation and cleanup
+    paragraphs[2].b.extract()
+    explanation = paragraphs[2].renderContents()
     
     apod = {
-      "source_html": html.encode('utf-8'),
-      "title": title,
+      "title":               title,
+      "image_credit":        image_credit.encode('utf-8'),
       "high_res_image_path": base_image_url + high_res_image_path,
-      "low_res_image_path": base_image_url + image_path,
-      "explanation": explanation.encode('utf-8'),
-      "date": date,
-      "created_at": datetime.datetime.utcnow()
+      "low_res_image_path":  base_image_url + image_path,
+      "explanation":         explanation,
+      "date":                date,
+      "created_at":          datetime.datetime.utcnow()
     }
     return apod
 
