@@ -8,15 +8,13 @@ import datetime
 class Apod:
 
   def __init__(self, date):
-    self.find_or_create(date)
-
-  def find_or_create(self, date):
     apod_collection = self.collection()
     apod = apod_collection.find_one({"date": date})
     if apod is None:
       id = apod_collection.insert(self.scrape_apod(date))
       apod = apod_collection.find_one({"_id": id})
 
+    self.id = apod['_id']
     self.title = apod['title']
     self.image_credit = apod['image_credit']
     self.high_res_image_path = apod['high_res_image_path']
@@ -24,6 +22,17 @@ class Apod:
     self.explanation = apod['explanation']
     self.date = apod['date']
     self.created_at = apod['created_at']
+    self.votes = apod['votes']
+
+  def vote(self, vote):
+    apod_collection = self.collection()
+    votes = self.votes
+    votes.append(int(vote))
+
+    apod_collection.update(
+      {'_id': self.id},
+      {"$set": {'votes': votes}}
+    )
 
   def scrape_apod(self, date):
     url = "http://apod.nasa.gov/apod/ap%s.html" % (date)
@@ -33,10 +42,10 @@ class Apod:
     ## Repair markup
     start_indexes = []
     index = 0
-    for m in re.finditer('<p>', html):
+    for p in re.finditer('<p>', html):
       index = index + 1
       if index % 2 == 0:
-        start_indexes.append(m.start())
+        start_indexes.append(p.start())
       
     for index in start_indexes:
       html = html[:(index + 2)] + "/" + html[(index + 2):]
@@ -72,7 +81,8 @@ class Apod:
       "low_res_image_path":  base_image_url + image_path,
       "explanation":         explanation,
       "date":                date,
-      "created_at":          datetime.datetime.utcnow()
+      "created_at":          datetime.datetime.utcnow(),
+      "votes":               []
     }
     return apod
 

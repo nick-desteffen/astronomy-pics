@@ -9,13 +9,14 @@ Apod = {};
 
 Apod.View = Backbone.View.extend({
   
-  el: "#viewport",
+  el: "#application",
 
   currentDate: null,
   
   events: {
     "click .next": "nextApod",
-    "click .previous": "previousApod"
+    "click .previous": "previousApod",
+    "click #submit-vote": "vote"
   },
 
   initialize: function () {
@@ -43,19 +44,18 @@ Apod.View = Backbone.View.extend({
   },
 
   _getApod: function(){
-    var date = this.currentDate.format("YYMMDD");
     var view = this;
-    $.getJSON("apod/" + date, function(data){
+    $.getJSON("apod/" + this._param(), function(data){
       console.log(data);
       $("#title").text(data.title);
       $("#explanation").html(data.explanation);
       $("#image_credit").html(data.image_credit);
-      $("#image").html("<img src='" + data.low_res_image_path + "'/>");
+      $("#image").html("<img src='" + data.low_res_image_path + "' />");
+      $("#votes").text(data.votes);
 
       view._formatLinks("#explanation a");
       view._formatLinks("#image_credit a");
     });
-  
   },
 
   _formatLinks: function(selector){
@@ -63,10 +63,21 @@ Apod.View = Backbone.View.extend({
     links.each(function(index, link){
       $(link).attr("target", "_blank");
       var href = $(link).attr("href");
-      if (!href.match("^http")) {
+      if (href != undefined && !href.match("^http")) {
         $(link).attr("href", "http://apod.nasa.gov/apod/" + href);
       }
     });
+  },
+
+  vote: function(event){
+    event.preventDefault();
+    var vote = $("#vote").val();
+
+    $.post("apod/" + this._param() + "/vote", {vote: vote});
+  },
+
+  _param: function(){
+    return this.currentDate.format("YYMMDD");
   }
 
 });
