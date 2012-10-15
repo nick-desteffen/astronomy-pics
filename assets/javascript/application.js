@@ -44,6 +44,7 @@ Apod.View = Backbone.View.extend({
 
   _getApod: function(){
     var date = this.currentDate.format("YYMMDD");
+    var view = this;
     $.getJSON("apod/" + date, function(data){
       console.log(data);
       $("#title").text(data.title);
@@ -51,18 +52,24 @@ Apod.View = Backbone.View.extend({
       $("#image_credit").html(data.image_credit);
       $("#image").html("<img src='" + data.low_res_image_path + "'/>");
 
-      // Add target=_blank to all links
-      var links = $("#explanation a");
-      links = links.add($("#image_credit a"));
-      links.each(function(index, link){
-        $(link).attr("target", "_blank");
-      });
+      view._formatLinks("#explanation a");
+      view._formatLinks("#image_credit a");
+    });
+  
+  },
 
+  _formatLinks: function(selector){
+    var links = $(selector);
+    links.each(function(index, link){
+      $(link).attr("target", "_blank");
+      var href = $(link).attr("href");
+      if (!href.match("^http")) {
+        $(link).attr("href", "http://apod.nasa.gov/apod/" + href);
+      }
     });
   }
 
 });
-
 
 
 $(function(){
