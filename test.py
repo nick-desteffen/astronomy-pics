@@ -1,7 +1,7 @@
 from app import models
 from app.apod import Apod
 
-apod = Apod('121005')
+apod = Apod('120922')
 apod.vote(5)
 
 # print apod.title

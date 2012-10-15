@@ -1,4 +1,4 @@
-%rebase layout title='Content Title'
+%rebase layout title='Astronomy Pics.net'
 <div id="application">
   <h1 id="title">Astronomy Pics.net</h1>
   <div id="image"></div>

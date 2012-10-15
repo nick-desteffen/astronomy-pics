@@ -46,7 +46,6 @@ Apod.View = Backbone.View.extend({
   _getApod: function(){
     var view = this;
     $.getJSON("apod/" + this._param(), function(data){
-      console.log(data);
       $("#title").text(data.title);
       $("#explanation").html(data.explanation);
       $("#image_credit").html(data.image_credit);
@@ -71,9 +70,12 @@ Apod.View = Backbone.View.extend({
 
   vote: function(event){
     event.preventDefault();
-    var vote = $("#vote").val();
-
-    $.post("apod/" + this._param() + "/vote", {vote: vote});
+    var voteField = $("#vote");
+    var vote = voteField.val();
+    if (vote != ""){
+      $.post("apod/" + this._param() + "/vote", {vote: vote});
+      voteField.val("");
+    }
   },
 
   _param: function(){

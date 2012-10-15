@@ -76,7 +76,7 @@ class Apod:
     
     apod = {
       "title":               title,
-      "image_credit":        image_credit.encode('utf-8'),
+      "image_credit":        image_credit,
       "high_res_image_path": base_image_url + high_res_image_path,
       "low_res_image_path":  base_image_url + image_path,
       "explanation":         explanation,
