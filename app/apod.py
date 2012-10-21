@@ -23,6 +23,7 @@ class Apod:
     self.date = apod['date']
     self.created_at = apod['created_at']
     self.votes = apod['votes']
+    self.slug = apod['slug']
 
   def vote(self, vote):
     apod_collection = self.collection()
@@ -66,14 +67,18 @@ class Apod:
     ## Find the image credit and cleanup
     centers[1].b.extract() ## Remove Title
     centers[1].b.unwrap() ## Remove other bold tags
-    image_credit = centers[1].renderContents()
+    image_credit = centers[1].renderContents().replace("\n", "").strip()
     image_credit = re.sub("<br>", "", image_credit) ## Remove line breaks
     image_credit = re.sub("</br>", "", image_credit)
 
     ## Find the explanation and cleanup
     paragraphs[2].b.extract()
-    explanation = paragraphs[2].renderContents()
+    explanation = paragraphs[2].renderContents().strip()
     
+    ## Build the slug
+    slug = re.sub(r'([^\s\w]|_)+', '', title)
+    slug = slug.lower().replace(" ", "-")
+
     apod = {
       "title":               title,
       "image_credit":        image_credit,
@@ -82,6 +87,7 @@ class Apod:
       "explanation":         explanation,
       "date":                date,
       "created_at":          datetime.datetime.utcnow(),
+      "slug":                slug,
       "votes":               []
     }
     return apod

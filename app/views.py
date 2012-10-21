@@ -18,6 +18,7 @@ def apod(date):
     "high_res_image_path": apod.high_res_image_path, 
     "explanation":         apod.explanation, 
     "date":                apod.date,
+    "slug":                apod.slug,
     "votes":               apod.votes
   }
 
