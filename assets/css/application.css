@@ -4,3 +4,60 @@
 body{
   font-family: 'Gentium Book Basic', serif;
 }
+
+#application{
+}
+
+#title{
+  text-align: center;
+  width: 1000px;
+  margin: 10px auto;
+}
+
+#image{
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
+  max-width: 1000px;
+  text-align: center;
+}
+
+#controls{
+  margin-left: auto;
+  margin-right: auto;
+  width: 600px;
+  text-align: center;
+  margin-bottom: 75px;
+}
+
+#rating{
+  float: left;
+  width: 400px;
+}
+
+#controls .btn {
+  margin-top: 8px;
+  float: left;
+  display: block;
+}
+
+#controls .previous{
+  margin-right: 50px;
+}
+
+#controls .next{
+  margin-left: 50px;
+  width: 55px;
+}
+
+#image_credit{
+  text-align: center;
+  margin: 20px auto;
+  width: 1000px;
+}
+
+#explanation{
+  margin-left: auto;
+  margin-right: auto;
+  width: 1000px;
+}

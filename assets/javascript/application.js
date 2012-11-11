@@ -1,22 +1,25 @@
 Apod = {};
-// Apod.Model = Backbone.Model.extend({
 
-// });
-
-// Apod.Collection = Backbone.Collection.extend({
-//   model: Apod.Model
-// });
+var ratyOptions = {
+  hints      : ['1', '2', '3', '4', '5'],
+  noRatedMsg : 'not rated yet',
+  path       : '/assets/images/',
+  readOnly   : false,
+  starOff    : 'img-full-star-grey.png',
+  starOn     : 'img-full-star.png',
+  width      : '235px'
+}
 
 Apod.View = Backbone.View.extend({
-  
+
   el: "#application",
 
   currentDate: null,
-  
+
   events: {
-    "click .next": "nextApod",
+    "click .next":     "nextApod",
     "click .previous": "previousApod",
-    "click #submit-vote": "vote"
+    "click #rating":   "vote"
   },
 
   initialize: function () {
@@ -26,6 +29,8 @@ Apod.View = Backbone.View.extend({
 
   render: function(){
     this._getApod();
+    $('#rating').raty(ratyOptions);
+
     return this.$el;
   },
 
@@ -34,23 +39,30 @@ Apod.View = Backbone.View.extend({
     if (this.currentDate.diff(moment(), 'days') < 0) {
       this.currentDate.add("days", 1);
       this._getApod();
+      $('#rating').raty('reload');
     }
   },
 
   previousApod: function(event){
-    event.preventDefault();      
+    event.preventDefault();
     this.currentDate.subtract("days", 1);
     this._getApod();
+    $('#rating').raty('reload');
   },
 
   _getApod: function(){
     var view = this;
-    $.getJSON("apod/" + this._param(), function(data){
+    $.getJSON("apod/" + this.param(), function(data){
       $("#title").text(data.title);
-      $("#explanation").html(data.explanation);
+      $("#explanation").html("<b>Explanation:&nbsp;&nbsp;</b>" + data.explanation);
       $("#image_credit").html(data.image_credit);
-      $("#image").html("<img src='" + data.low_res_image_path + "' />");
       $("#votes").text(data.votes);
+
+      if (data.type == "image"){
+        $("#image").html("<img src='" + data.low_res_image_path + "' class='img-rounded' />");
+      } else {
+        $("#image").html('<iframe width="960" height="720" src="' + data.low_res_image_path + '" frameborder="0" allowfullscreen></iframe>');
+      }
 
       view._formatLinks("#explanation a");
       view._formatLinks("#image_credit a");
@@ -70,22 +82,17 @@ Apod.View = Backbone.View.extend({
 
   vote: function(event){
     event.preventDefault();
-    var voteField = $("#vote");
-    var vote = voteField.val();
-    if (vote != ""){
-      $.post("apod/" + this._param() + "/vote", {vote: vote});
-      voteField.val("");
-    }
+    var rating = $('#rating').raty('score');
+    console.log(rating);
   },
 
-  _param: function(){
+  param: function(){
     return this.currentDate.format("YYMMDD");
   }
 
 });
 
-
 $(function(){
-  view = new Apod.View();
+  var view = new Apod.View();
   view.render();
 });

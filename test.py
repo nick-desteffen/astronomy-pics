@@ -1,9 +1,16 @@
 from app import models
 from app.apod import Apod
 
-apod = Apod('120922')
-apod.vote(5)
+apod = Apod('121107')
+#apod.vote(5)
 
-# print apod.title
-# print apod.explanation
-# print apod.high_res_image_path
+print apod.title
+print apod.type
+print apod.low_res_image_path
+print apod.high_res_image_path
+print apod.date
+print apod.created_at
+print apod.slug
+print apod.votes
+print apod.image_credit
+print apod.explanation

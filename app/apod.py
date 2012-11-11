@@ -24,6 +24,7 @@ class Apod:
     self.created_at = apod['created_at']
     self.votes = apod['votes']
     self.slug = apod['slug']
+    self.type = apod['type']
 
   def vote(self, vote):
     apod_collection = self.collection()
@@ -47,7 +48,7 @@ class Apod:
       index = index + 1
       if index % 2 == 0:
         start_indexes.append(p.start())
-      
+
     for index in start_indexes:
       html = html[:(index + 2)] + "/" + html[(index + 2):]
 
@@ -56,10 +57,16 @@ class Apod:
     centers = soup.find_all('center')
     paragraphs = soup.find_all('p')
 
-    ## Find the image paths
+    ## Find the image or video paths
     base_image_url = "http://apod.nasa.gov/apod/"
-    high_res_image_path = centers[0].find_all("a")[1].get("href")
-    image_path = centers[0].img.get("src")
+    if len(centers[0].find_all("img")) > 0:
+      high_res_image_path = base_image_url + centers[0].find_all("a")[1].get("href")
+      low_res_image_path = base_image_url + centers[0].img.get("src")
+      type = 'image'
+    elif len(centers[0].find_all("iframe")) > 0:
+      low_res_image_path = centers[0].iframe.get("src")
+      high_res_image_path = centers[0].iframe.get("src")
+      type = 'video'
 
     ## Find the title
     title = centers[1].find_all("b")[0].text.strip()
@@ -67,14 +74,14 @@ class Apod:
     ## Find the image credit and cleanup
     centers[1].b.extract() ## Remove Title
     centers[1].b.unwrap() ## Remove other bold tags
-    image_credit = centers[1].renderContents().replace("\n", "").strip()
+    image_credit = centers[1].renderContents()
     image_credit = re.sub("<br>", "", image_credit) ## Remove line breaks
     image_credit = re.sub("</br>", "", image_credit)
 
     ## Find the explanation and cleanup
     paragraphs[2].b.extract()
     explanation = paragraphs[2].renderContents().strip()
-    
+
     ## Build the slug
     slug = re.sub(r'([^\s\w]|_)+', '', title)
     slug = slug.lower().replace(" ", "-")
@@ -82,12 +89,13 @@ class Apod:
     apod = {
       "title":               title,
       "image_credit":        image_credit,
-      "high_res_image_path": base_image_url + high_res_image_path,
-      "low_res_image_path":  base_image_url + image_path,
+      "high_res_image_path": high_res_image_path,
+      "low_res_image_path":  low_res_image_path,
       "explanation":         explanation,
       "date":                date,
       "created_at":          datetime.datetime.utcnow(),
       "slug":                slug,
+      "type":                type,
       "votes":               []
     }
     return apod
