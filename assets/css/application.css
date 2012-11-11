@@ -8,7 +8,7 @@ body{
 #application{
 }
 
-#title{
+.header{
   text-align: center;
   width: 1000px;
   margin: 10px auto;

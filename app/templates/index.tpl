@@ -1,7 +1,8 @@
 %rebase layout title='Astronomy Pics.net'
 
 <div id="application">
-  <h1 id="title">Astronomy Pics.net</h1>
+  <h1 id="title" class="header">Astronomy Pics.net</h1>
+  <h3 id="date" class="header"></h3>
   <div id="controls">
     <a href='#' class='previous btn btn-info'>Previous</a>
     <div id="rating"></div>

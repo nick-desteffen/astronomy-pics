@@ -39,7 +39,7 @@ Apod.View = Backbone.View.extend({
     if (this.currentDate.diff(moment(), 'days') < 0) {
       this.currentDate.add("days", 1);
       this._getApod();
-      $('#rating').raty('reload');
+      this.showRating();
     }
   },
 
@@ -47,7 +47,7 @@ Apod.View = Backbone.View.extend({
     event.preventDefault();
     this.currentDate.subtract("days", 1);
     this._getApod();
-    $('#rating').raty('reload');
+    this.showRating();
   },
 
   _getApod: function(){
@@ -57,6 +57,7 @@ Apod.View = Backbone.View.extend({
       $("#explanation").html("<b>Explanation:&nbsp;&nbsp;</b>" + data.explanation);
       $("#image_credit").html(data.image_credit);
       $("#votes").text(data.votes);
+      $("#date").text(view.currentDate.format('MMMM Do, YYYY'))
 
       if (data.type == "image"){
         $("#image").html("<img src='" + data.low_res_image_path + "' class='img-rounded' />");
@@ -67,6 +68,18 @@ Apod.View = Backbone.View.extend({
       view._formatLinks("#explanation a");
       view._formatLinks("#image_credit a");
     });
+  },
+
+  showRating: function(){
+    var existingVote = this.storedVote();
+    if (existingVote == null){
+      $('#rating').raty('readOnly', true);
+      $('#rating').raty('reload', {score: undefined});
+    } else {
+      $('#rating').raty('reload', {score: undefined});
+      $('#rating').raty('score', parseInt(existingVote));
+      $('#rating').raty('readOnly', true);
+    }
   },
 
   _formatLinks: function(selector){
@@ -82,19 +95,30 @@ Apod.View = Backbone.View.extend({
 
   vote: function(event){
     event.preventDefault();
-    var vote = $('#rating').raty('score');
-    if (vote != ""){
-      $.post("apod/" + this.param() + "/vote", {vote: vote});
+    var existingVote = this.storedVote();
+    if (existingVote == null) {
+      var vote = $('#rating').raty('score');
+      if (vote != ""){
+        $.post("apod/" + this.param() + "/vote", {vote: vote});
+      }
+      localStorage[this.param()] = vote;
     }
+
+    // store vote & currentDate in local storage
+    // update
   },
 
   param: function(){
     return this.currentDate.format("YYMMDD");
+  },
+
+  storedVote: function(){
+    return localStorage.getItem(this.param());
   }
 
 });
 
 $(function(){
-  var view = new Apod.View();
-  view.render();
+  window.view = new Apod.View();
+  window.view.render();
 });
