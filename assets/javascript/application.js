@@ -30,7 +30,7 @@ Apod.View = Backbone.View.extend({
 
   render: function(){
     this._getApod();
-    $('#rating').raty(ratyOptions);
+    this.ratingElement().raty(ratyOptions);
     this.showRating();
 
     return this.$el;
@@ -75,13 +75,14 @@ Apod.View = Backbone.View.extend({
 
   showRating: function(){
     var existingVote = this.storedVote();
+    var ratingElement = this.ratingElement();
     if (existingVote == null){
-      $('#rating').raty('readOnly', false);
-      $('#rating').raty('reload', {score: undefined});
+      ratingElement.raty('readOnly', false);
+      ratingElement.raty('reload', {score: undefined});
     } else {
-      $('#rating').raty('reload', {score: undefined});
-      $('#rating').raty('score', parseInt(existingVote));
-      $('#rating').raty('readOnly', true);
+      ratingElement.raty('reload', {score: undefined});
+      ratingElement.raty('score', parseInt(existingVote));
+      ratingElement.raty('readOnly', true);
     }
   },
 
@@ -114,7 +115,7 @@ Apod.View = Backbone.View.extend({
     event.preventDefault();
     var existingVote = this.storedVote();
     if (existingVote == null) {
-      var vote = $('#rating').raty('score');
+      var vote = this.ratingElement().raty('score');
       if (vote != ""){
         $.post("apod/" + this.param() + "/vote", {vote: vote});
       }
@@ -130,6 +131,10 @@ Apod.View = Backbone.View.extend({
 
   storedVote: function(){
     return localStorage.getItem(this.param());
+  },
+
+  ratingElement: function(){
+    return $("#rating");
   }
 
 });
