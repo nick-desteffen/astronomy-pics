@@ -15,6 +15,7 @@ Apod.View = Backbone.View.extend({
   el: "#application",
 
   currentDate: null,
+  currentApod: null,
 
   events: {
     "click .next":     "nextApod",
@@ -30,6 +31,7 @@ Apod.View = Backbone.View.extend({
   render: function(){
     this._getApod();
     $('#rating').raty(ratyOptions);
+    this.showRating();
 
     return this.$el;
   },
@@ -53,16 +55,17 @@ Apod.View = Backbone.View.extend({
   _getApod: function(){
     var view = this;
     $.getJSON("apod/" + this.param(), function(data){
-      $("#title").text(data.title);
-      $("#explanation").html("<b>Explanation:&nbsp;&nbsp;</b>" + data.explanation);
-      $("#image_credit").html(data.image_credit);
-      $("#votes").text(data.votes);
+      view.currentApod = new Backbone.Model(data);
+      $("#title").text(view.currentApod.get('title'));
+      $("#explanation").html("<b>Explanation:&nbsp;&nbsp;</b>" + view.currentApod.get('explanation'));
+      $("#image_credit").html(view.currentApod.get('image_credit'));
       $("#date").text(view.currentDate.format('MMMM Do, YYYY'))
+      view.showAverageRating();
 
-      if (data.type == "image"){
-        $("#image").html("<img src='" + data.low_res_image_path + "' class='img-rounded' />");
+      if (view.currentApod.get('type') == "image"){
+        $("#image").html("<img src='" + view.currentApod.get('low_res_image_path') + "' class='img-rounded' />");
       } else {
-        $("#image").html('<iframe width="960" height="720" src="' + data.low_res_image_path + '" frameborder="0" allowfullscreen></iframe>');
+        $("#image").html('<iframe width="960" height="720" src="' + view.currentApod.get('low_res_image_path') + '" frameborder="0" allowfullscreen></iframe>');
       }
 
       view._formatLinks("#explanation a");
@@ -73,12 +76,26 @@ Apod.View = Backbone.View.extend({
   showRating: function(){
     var existingVote = this.storedVote();
     if (existingVote == null){
-      $('#rating').raty('readOnly', true);
+      $('#rating').raty('readOnly', false);
       $('#rating').raty('reload', {score: undefined});
     } else {
       $('#rating').raty('reload', {score: undefined});
       $('#rating').raty('score', parseInt(existingVote));
       $('#rating').raty('readOnly', true);
+    }
+  },
+
+  showAverageRating: function(){
+    var existingVote = this.storedVote();
+    if (existingVote){
+      var votes = this.currentApod.get("votes")
+      var average = _.reduce(votes, function(memo, num){
+        return memo + num;
+      }, 0) / votes.length;
+
+      $("#average-rating").text("Average: " + Math.round(average) + " out of " + votes.length + " votes");
+    } else {
+      $("#average-rating").text("");
     }
   },
 
@@ -102,10 +119,9 @@ Apod.View = Backbone.View.extend({
         $.post("apod/" + this.param() + "/vote", {vote: vote});
       }
       localStorage[this.param()] = vote;
+      this.currentApod.get("votes").push(vote);
+      this.showAverageRating();
     }
-
-    // store vote & currentDate in local storage
-    // update
   },
 
   param: function(){

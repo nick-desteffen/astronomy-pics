@@ -8,6 +8,7 @@
     <div id="rating"></div>
     <a href='#' class='next btn btn-info'>Next</a>
   </div>
+  <div id="average-rating"></div>
   <div id="votes"></div>
   <div id="image"></div>
   <div id="image_credit"></div>
