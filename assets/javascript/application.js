@@ -82,8 +82,10 @@ Apod.View = Backbone.View.extend({
 
   vote: function(event){
     event.preventDefault();
-    var rating = $('#rating').raty('score');
-    console.log(rating);
+    var vote = $('#rating').raty('score');
+    if (vote != ""){
+      $.post("apod/" + this.param() + "/vote", {vote: vote});
+    }
   },
 
   param: function(){

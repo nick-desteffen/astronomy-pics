@@ -32,16 +32,8 @@
   </head>
   <body>
     <div class="container-narrow">
-      <div class="masthead">
-        <h3 class="muted">AstronomyPics.net</h3>
-      </div>
-
-      <hr>
-
       %include
-
       <hr>
-
       <div class="footer">
         <p><a href="/about">About</a>&nbsp;/&nbsp;<a href="http://apod.nasa.gov" target="_blank">Astronomy Picture of the Day</a></p>
       </div>

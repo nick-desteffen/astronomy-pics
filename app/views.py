@@ -27,9 +27,9 @@ def apod(date):
 def server_asset(filepath):
   return static_file(filepath, root='./assets')
 
-@route('/apod/:date/vote', method='GET')
+@route('/apod/:date/vote', method='POST')
 def vote(date):
-  vote = request.GET.get('rating_number')
+  vote = request.POST.get('vote')
   apod = Apod(date)
   apod.vote(vote)
   return None
