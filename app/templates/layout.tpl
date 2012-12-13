@@ -38,7 +38,7 @@
         <p><a href="/about">About</a>&nbsp;/&nbsp;<a href="http://apod.nasa.gov" target="_blank">Astronomy Picture of the Day</a></p>
       </div>
     </div>
-    <script type="text/javascript" src="/assets/javascript/jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="/assets/javascript/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="/assets/javascript/underscore-min.js"></script>
     <script type="text/javascript" src="/assets/javascript/backbone-min.js"></script>
     <script type="text/javascript" src="/assets/javascript/moment.min.js"></script>
