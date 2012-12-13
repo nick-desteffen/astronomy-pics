@@ -1,7 +1,10 @@
+import os
 from bottle import TEMPLATE_PATH, route, static_file, template, install, request
 from apod import Apod
 
-TEMPLATE_PATH.append("./app/templates")
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+
+TEMPLATE_PATH.append(BASE_PATH + "/templates")
 
 @route('/', method='GET')
 def index():
@@ -25,7 +28,7 @@ def apod(date):
 
 @route('/assets/<filepath:path>', method='GET')
 def server_asset(filepath):
-  return static_file(filepath, root='./assets')
+  return static_file(filepath, root=BASE_PATH + '/../assets')
 
 @route('/apod/:date/vote', method='POST')
 def vote(date):
