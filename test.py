@@ -1,4 +1,4 @@
-from app import models
+#from app import models
 from app.apod import Apod
 
 apod = Apod('121107')
