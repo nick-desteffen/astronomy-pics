@@ -1,34 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
     <title>{{title or ''}}</title>
-
+    
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Nick DeSteffen">
 
-
+    <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
     <link href="/assets/css/application.css" rel="stylesheet" type="text/css" />
-    <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
-
-    <style type="text/css">
-      body {
-        padding-top: 20px;
-        padding-bottom: 40px;
-      }
-
-      /* Custom container */
-      .container-narrow {
-        margin: 0 auto;
-        max-width: 1000px;
-      }
-      .container-narrow > hr {
-        margin: 30px 0;
-      }
-
-    </style>
-    <link href="/assets/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
   </head>
   <body>
     <div class="container-narrow">
