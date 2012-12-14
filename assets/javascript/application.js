@@ -1,7 +1,6 @@
 Apod = {};
 
 // TODOS
-// - Router
 // - Calendar
 // - Random button
 // - Download button
@@ -16,12 +15,29 @@ var ratyOptions = {
   width      : '235px'
 }
 
+Apod.Router = Backbone.Router.extend({
+
+  routes: {
+    ":date": "navigateToDate"
+  },
+
+  initialize: function (options) {
+    this.app = options.app
+  },
+
+  navigateToDate: function(){
+    this.app.refresh();
+  }
+
+});
+
 Apod.View = Backbone.View.extend({
 
   el: "#application",
 
   currentDate: null,
   currentApod: null,
+  router: null,
 
   events: {
     "click .next":     "nextApod",
@@ -30,32 +46,40 @@ Apod.View = Backbone.View.extend({
   },
 
   initialize: function () {
-    this.currentDate = moment();
+    if (window.startingDate == undefined) {
+      this.currentDate = moment();
+      this.refresh();
+    } else {
+      this.currentDate = this.parseDate(window.startingDate);
+    }
+
+    this.router = new Apod.Router({app: this});
+    Backbone.history.start({pushState: true});
     Backbone.View.prototype.initialize.apply(this, arguments);
   },
 
   render: function(){
+    return this.$el;
+  },
+
+  refresh: function(){
     this._getApod();
     $('#rating').raty(ratyOptions);
     this.showRating();
-
-    return this.$el;
   },
 
   nextApod: function(event){
     event.preventDefault();
     if (this.currentDate.diff(moment(), 'days') < 0) {
       this.currentDate.add("days", 1);
-      this._getApod();
-      this.showRating();
+      this.router.navigate(this.param(), {trigger: true});
     }
   },
 
   previousApod: function(event){
     event.preventDefault();
     this.currentDate.subtract("days", 1);
-    this._getApod();
-    this.showRating();
+    this.router.navigate(this.param(), {trigger: true});
   },
 
   _getApod: function(){
@@ -136,6 +160,12 @@ Apod.View = Backbone.View.extend({
 
   storedVote: function(){
     return localStorage.getItem(this.param());
+  },
+
+  parseDate: function(date){
+    date = String(date);
+    var formattedDate = "20" + date[0] + date[1] + "-" + date[2] + date[3] + "-" + date[4] + date[5];
+    return moment(formattedDate);
   }
 
 });
