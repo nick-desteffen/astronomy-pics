@@ -18,6 +18,11 @@ body{
 #application{
 }
 
+.tech{
+  margin: 10px;
+  padding: 10px;
+}
+
 .header{
   text-align: center;
   width: 1000px;

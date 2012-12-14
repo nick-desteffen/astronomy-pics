@@ -10,6 +10,10 @@ TEMPLATE_PATH.append(BASE_PATH + "/templates")
 def index():
   return template('index.tpl')
 
+@route('/about', method='GET')
+def about():
+  return template('about.tpl')
+
 @route('/apod/:date', method='GET')
 def apod(date):
   apod = Apod(date)
