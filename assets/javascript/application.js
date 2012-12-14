@@ -1,5 +1,11 @@
 Apod = {};
 
+// TODOS
+// - Router
+// - Calendar
+// - Random button
+// - Download button
+
 var ratyOptions = {
   hints      : ['1', '2', '3', '4', '5'],
   noRatedMsg : 'not rated yet',
@@ -30,7 +36,7 @@ Apod.View = Backbone.View.extend({
 
   render: function(){
     this._getApod();
-    this.ratingElement().raty(ratyOptions);
+    $('#rating').raty(ratyOptions);
     this.showRating();
 
     return this.$el;
@@ -75,14 +81,13 @@ Apod.View = Backbone.View.extend({
 
   showRating: function(){
     var existingVote = this.storedVote();
-    var ratingElement = this.ratingElement();
     if (existingVote == null){
-      ratingElement.raty('readOnly', false);
-      ratingElement.raty('reload', {score: undefined});
+      $('#rating').raty('readOnly', false);
+      $('#rating').raty('reload', {score: undefined});
     } else {
-      ratingElement.raty('reload', {score: undefined});
-      ratingElement.raty('score', parseInt(existingVote));
-      ratingElement.raty('readOnly', true);
+      $('#rating').raty('reload', {score: undefined});
+      $('#rating').raty('score', parseInt(existingVote));
+      $('#rating').raty('readOnly', true);
     }
   },
 
@@ -115,7 +120,7 @@ Apod.View = Backbone.View.extend({
     event.preventDefault();
     var existingVote = this.storedVote();
     if (existingVote == null) {
-      var vote = this.ratingElement().raty('score');
+      var vote = $('#rating').raty('score');
       if (vote != ""){
         $.post("apod/" + this.param() + "/vote", {vote: vote});
       }
@@ -131,10 +136,6 @@ Apod.View = Backbone.View.extend({
 
   storedVote: function(){
     return localStorage.getItem(this.param());
-  },
-
-  ratingElement: function(){
-    return $("#rating");
   }
 
 });
