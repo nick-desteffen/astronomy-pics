@@ -1,4 +1,5 @@
-#from app import models
+import os
+from app import models
 from app.apod import Apod
 
 apod = Apod('121107')
@@ -14,3 +15,4 @@ print apod.slug
 print apod.votes
 print apod.image_credit
 print apod.explanation
+
