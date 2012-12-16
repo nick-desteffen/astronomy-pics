@@ -83,6 +83,11 @@ body{
   width: 1000px;
 }
 
-.bottomControls {
+.bottomButton {
   margin-top: 20px;
+}
+
+#datepicker{
+  margin-top: 30px;
+  width: 75px;
 }

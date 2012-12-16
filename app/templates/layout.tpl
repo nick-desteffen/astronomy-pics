@@ -10,6 +10,7 @@
 
     <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/css/datepicker.css" rel="stylesheet" type="text/css" />
     <link href="/assets/css/application.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
@@ -24,6 +25,7 @@
     <script type="text/javascript" src="/assets/javascript/underscore-min.js"></script>
     <script type="text/javascript" src="/assets/javascript/backbone-min.js"></script>
     <script type="text/javascript" src="/assets/javascript/moment.min.js"></script>
+    <script type="text/javascript" src="/assets/javascript/bootstrap-datepicker.js"></script>
     <script type="text/javascript" src="/assets/javascript/jquery.raty.js"></script>
     <script type="text/javascript" src="/assets/javascript/application.js"></script>
     <script type="text/javascript">

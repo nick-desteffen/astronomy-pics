@@ -1,8 +1,5 @@
 Apod = {};
 
-// TODOS
-// - Calendar
-
 var ratyOptions = {
   hints      : ['1', '2', '3', '4', '5'],
   noRatedMsg : 'not rated yet',
@@ -38,6 +35,7 @@ Apod.View = Backbone.View.extend({
   currentDate: null,
   currentApod: null,
   router: null,
+  firstApod: new Date(1996, 0, 8), // 6/16/1995 is the oldest, but anything prior to 1/9/1996 is a different format.
 
   events: {
     "click .next"     : "nextApod",
@@ -49,6 +47,7 @@ Apod.View = Backbone.View.extend({
   initialize: function () {
     this.router = new Apod.Router({app: this});
     Backbone.history.start({pushState: true});
+    this.initializeDatePicker();
     Backbone.View.prototype.initialize.apply(this, arguments);
   },
 
@@ -91,8 +90,10 @@ Apod.View = Backbone.View.extend({
 
   previousApod: function(event){
     event.preventDefault();
-    this.currentDate.subtract("days", 1);
-    this.router.navigate(this.param(), {trigger: true});
+    if (this.currentDate.diff(moment(this.firstApod), 'days') > 1) {
+      this.currentDate.subtract("days", 1);
+      this.router.navigate(this.param(), {trigger: true});
+    }
   },
 
   showRating: function(){
@@ -167,11 +168,22 @@ Apod.View = Backbone.View.extend({
 
   random: function(event){
     event.preventDefault();
-    var oldest = new Date(1995, 6, 16); // First APOD
-    var newest = new Date();
-    var randomDate = new Date(oldest.getTime() + Math.random() * (newest.getTime() - oldest.getTime()));
+    var randomDate = new Date(this.firstApod.getTime() + Math.random() * (new Date().getTime() - this.firstApod.getTime()));
     this.currentDate = moment(randomDate);
     this.router.navigate(this.param(), {trigger: true});
+  },
+
+  initializeDatePicker: function(){
+    var view = this;
+    $('#datepicker').datepicker({
+      autoclose: true,
+      startDate: view.firstApod,
+      endDate: new Date(),
+      todayHighlight: true
+    }).on('changeDate', function(event){
+      view.currentDate = moment($("#datepicker").val());
+      view.router.navigate(view.param(), {trigger: true});
+    });
   }
 
 });

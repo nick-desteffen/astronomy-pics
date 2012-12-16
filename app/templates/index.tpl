@@ -13,6 +13,7 @@
   <div id="image"></div>
   <div id="image_credit"></div>
   <div id="explanation"></div>
-  <a id="download" class="bottomControls btn" download="" href="">Download</a>
-  <a id="random" class="bottomControls btn" href="#">Random</a>
+  <a id="download" class="bottomButton btn" download="" href="">Download</a>
+  <a id="random" class="bottomButton btn" href="#">Random</a>
+  <input type="text" value="" id="datepicker" placeholder="Pick a date">
 </div>
