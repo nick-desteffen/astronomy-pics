@@ -2,7 +2,6 @@ Apod = {};
 
 // TODOS
 // - Calendar
-// - Random button
 
 var ratyOptions = {
   hints      : ['1', '2', '3', '4', '5'],
@@ -41,9 +40,10 @@ Apod.View = Backbone.View.extend({
   router: null,
 
   events: {
-    "click .next":     "nextApod",
-    "click .previous": "previousApod",
-    "click #rating":   "vote"
+    "click .next"     : "nextApod",
+    "click .previous" : "previousApod",
+    "click #rating"   : "vote",
+    "click #random"   : "random"
   },
 
   initialize: function () {
@@ -163,6 +163,15 @@ Apod.View = Backbone.View.extend({
       var formattedDate = century + date[0] + date[1] + "-" + date[2] + date[3] + "-" + date[4] + date[5];
       this.currentDate = moment(formattedDate);
     }
+  },
+
+  random: function(event){
+    event.preventDefault();
+    var oldest = new Date(1995, 6, 16); // First APOD
+    var newest = new Date();
+    var randomDate = new Date(oldest.getTime() + Math.random() * (newest.getTime() - oldest.getTime()));
+    this.currentDate = moment(randomDate);
+    this.router.navigate(this.param(), {trigger: true});
   }
 
 });

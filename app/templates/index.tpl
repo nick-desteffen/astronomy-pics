@@ -13,5 +13,6 @@
   <div id="image"></div>
   <div id="image_credit"></div>
   <div id="explanation"></div>
-  <a id="download" class="btn" download="" href="">Download</a>
+  <a id="download" class="bottomControls btn" download="" href="">Download</a>
+  <a id="random" class="bottomControls btn" href="#">Random</a>
 </div>
