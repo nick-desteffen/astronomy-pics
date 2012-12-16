@@ -14,6 +14,3 @@
   <div id="image_credit"></div>
   <div id="explanation"></div>
 </div>
-<script type="text/javascript">
-  var startingDate = {{date}};
-</script>

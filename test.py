@@ -2,9 +2,10 @@ import os
 from app import models
 from app.apod import Apod
 
-apod = Apod('121107')
+apod = Apod('991204')
 #apod.vote(5)
 
+print apod.id
 print apod.title
 print apod.type
 print apod.low_res_image_path

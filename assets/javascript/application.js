@@ -24,10 +24,11 @@ Apod.Router = Backbone.Router.extend({
 
   initialize: function (options) {
     this.app = options.app
+    Backbone.Router.prototype.initialize.apply(this, arguments);
   },
 
-  navigateToDate: function(){
-    this.app.refresh();
+  navigateToDate: function(date){
+    this.app.refresh(date);
   }
 
 });
@@ -47,19 +48,32 @@ Apod.View = Backbone.View.extend({
   },
 
   initialize: function () {
-    if (window.startingDate == undefined) {
-      this.currentDate = moment();
-    } else {
-      this.currentDate = this.parseDate(window.startingDate);
-    }
-
     this.router = new Apod.Router({app: this});
     Backbone.history.start({pushState: true});
     Backbone.View.prototype.initialize.apply(this, arguments);
   },
 
-  refresh: function(){
-    this._getApod();
+  refresh: function(date){
+    this.setDate(date);
+    var view = this;
+    $.getJSON("apod/" + this.param(), function(data){
+      view.currentApod = new Backbone.Model(data);
+      $("#title").text(view.currentApod.get('title'));
+      $("#explanation").html("<b>Explanation:&nbsp;&nbsp;</b>" + view.currentApod.get('explanation'));
+      $("#image_credit").html(view.currentApod.get('image_credit'));
+      $("#date").text(view.currentDate.format('MMMM Do, YYYY'))
+
+      if (view.currentApod.get('type') == "image"){
+        $("#image").html("<a href='" + view.currentApod.get('high_res_image_path') + "' target='_blank'><img src='" + view.currentApod.get('low_res_image_path') + "' class='img-rounded' /></a>");
+      } else {
+        $("#image").html('<iframe width="960" height="720" src="' + view.currentApod.get('low_res_image_path') + '" frameborder="0" allowfullscreen></iframe>');
+      }
+      document.title = view.currentApod.get("title") + " | Astronomy Pics.net"
+      view._formatLinks("#explanation a");
+      view._formatLinks("#image_credit a");
+      view.showAverageRating();
+    });
+
     $('#rating').raty(ratyOptions);
     this.showRating();
   },
@@ -76,27 +90,6 @@ Apod.View = Backbone.View.extend({
     event.preventDefault();
     this.currentDate.subtract("days", 1);
     this.router.navigate(this.param(), {trigger: true});
-  },
-
-  _getApod: function(){
-    var view = this;
-    $.getJSON("apod/" + this.param(), function(data){
-      view.currentApod = new Backbone.Model(data);
-      $("#title").text(view.currentApod.get('title'));
-      $("#explanation").html("<b>Explanation:&nbsp;&nbsp;</b>" + view.currentApod.get('explanation'));
-      $("#image_credit").html(view.currentApod.get('image_credit'));
-      $("#date").text(view.currentDate.format('MMMM Do, YYYY'))
-      view.showAverageRating();
-
-      if (view.currentApod.get('type') == "image"){
-        $("#image").html("<img src='" + view.currentApod.get('low_res_image_path') + "' class='img-rounded' />");
-      } else {
-        $("#image").html('<iframe width="960" height="720" src="' + view.currentApod.get('low_res_image_path') + '" frameborder="0" allowfullscreen></iframe>');
-      }
-
-      view._formatLinks("#explanation a");
-      view._formatLinks("#image_credit a");
-    });
   },
 
   showRating: function(){
@@ -158,10 +151,15 @@ Apod.View = Backbone.View.extend({
     return localStorage.getItem(this.param());
   },
 
-  parseDate: function(date){
-    date = String(date);
-    var formattedDate = "20" + date[0] + date[1] + "-" + date[2] + date[3] + "-" + date[4] + date[5];
-    return moment(formattedDate);
+  setDate: function(date){
+    if (date == undefined) {
+      this.currentDate = moment();
+    } else {
+      var century = "20";
+      if (date[0] == "9") { century = "19" }
+      var formattedDate = century + date[0] + date[1] + "-" + date[2] + date[3] + "-" + date[4] + date[5];
+      this.currentDate = moment(formattedDate);
+    }
   }
 
 });

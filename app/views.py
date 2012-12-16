@@ -8,8 +8,8 @@ TEMPLATE_PATH.append(BASE_PATH + "/templates")
 
 @route('/', method='GET')
 @route('/<date>', method='GET')
-def index(date='undefined'):
-  return template('index.tpl', date=date)
+def index(date=None):
+  return template('index.tpl')
 
 @route('/about', method='GET')
 def about():
