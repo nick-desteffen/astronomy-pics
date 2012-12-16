@@ -18,7 +18,8 @@ var ratyOptions = {
 Apod.Router = Backbone.Router.extend({
 
   routes: {
-    ":date": "navigateToDate"
+    ""      : "navigateToDate",
+    ":date" : "navigateToDate"
   },
 
   initialize: function (options) {
@@ -48,7 +49,6 @@ Apod.View = Backbone.View.extend({
   initialize: function () {
     if (window.startingDate == undefined) {
       this.currentDate = moment();
-      this.refresh();
     } else {
       this.currentDate = this.parseDate(window.startingDate);
     }
@@ -56,10 +56,6 @@ Apod.View = Backbone.View.extend({
     this.router = new Apod.Router({app: this});
     Backbone.history.start({pushState: true});
     Backbone.View.prototype.initialize.apply(this, arguments);
-  },
-
-  render: function(){
-    return this.$el;
   },
 
   refresh: function(){
