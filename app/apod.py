@@ -67,13 +67,19 @@ class Apod:
       low_res_image_path = centers[0].iframe.get("src")
       high_res_image_path = centers[0].iframe.get("src")
       type = 'video'
+    else:
+      high_res_image_path = base_image_url + soup.find_all("a")[1].get("href")
+      low_res_image_path = base_image_url + soup.find_all('img')[0].get("src")
+      type = 'image'
 
     ## Find the title
     title = centers[1].find_all("b")[0].text.strip()
 
     ## Find the image credit and cleanup
     centers[1].b.extract() ## Remove Title
-    centers[1].b.unwrap() ## Remove other bold tags
+    if not centers[1].b == None:
+      centers[1].b.unwrap() ## Remove other bold tags
+
     image_credit = centers[1].renderContents()
     image_credit = re.sub("<br>", "", image_credit) ## Remove line breaks
     image_credit = re.sub("</br>", "", image_credit)

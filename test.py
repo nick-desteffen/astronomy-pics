@@ -2,7 +2,7 @@ import os
 from app import models
 from app.apod import Apod
 
-apod = Apod('970608')
+apod = Apod('050425')
 #apod.vote(5)
 
 print apod.id
