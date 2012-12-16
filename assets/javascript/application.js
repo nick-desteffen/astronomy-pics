@@ -3,7 +3,6 @@ Apod = {};
 // TODOS
 // - Calendar
 // - Random button
-// - Download button
 
 var ratyOptions = {
   hints      : ['1', '2', '3', '4', '5'],
@@ -23,7 +22,7 @@ Apod.Router = Backbone.Router.extend({
   },
 
   initialize: function (options) {
-    this.app = options.app
+    this.app = options.app;
     Backbone.Router.prototype.initialize.apply(this, arguments);
   },
 
@@ -61,16 +60,20 @@ Apod.View = Backbone.View.extend({
       $("#title").text(view.currentApod.get('title'));
       $("#explanation").html("<b>Explanation:&nbsp;&nbsp;</b>" + view.currentApod.get('explanation'));
       $("#image_credit").html(view.currentApod.get('image_credit'));
-      $("#date").text(view.currentDate.format('MMMM Do, YYYY'))
+      $("#date").text(view.currentDate.format('MMMM Do, YYYY'));
 
       if (view.currentApod.get('type') == "image"){
         $("#image").html("<a href='" + view.currentApod.get('high_res_image_path') + "' target='_blank'><img src='" + view.currentApod.get('low_res_image_path') + "' class='img-rounded' /></a>");
+        if (!$("#download").is(":visible")){ $("#download").show() }
+        $("#download").attr("href", view.currentApod.get('high_res_image_path'));
+        $("#download").attr("download", view.currentApod.get("slug"));
       } else {
+        $("#download").hide();
         $("#image").html('<iframe width="960" height="720" src="' + view.currentApod.get('low_res_image_path') + '" frameborder="0" allowfullscreen></iframe>');
       }
-      document.title = view.currentApod.get("title") + " | Astronomy Pics.net"
-      view._formatLinks("#explanation a");
-      view._formatLinks("#image_credit a");
+      document.title = view.currentApod.get("title") + " | Astronomy Pics.net";
+      view.formatLinks("#explanation a");
+      view.formatLinks("#image_credit a");
       view.showAverageRating();
     });
 
@@ -107,7 +110,7 @@ Apod.View = Backbone.View.extend({
   showAverageRating: function(){
     var existingVote = this.storedVote();
     if (existingVote){
-      var votes = this.currentApod.get("votes")
+      var votes = this.currentApod.get("votes");
       var average = _.reduce(votes, function(memo, num){
         return memo + num;
       }, 0) / votes.length;
@@ -118,7 +121,7 @@ Apod.View = Backbone.View.extend({
     }
   },
 
-  _formatLinks: function(selector){
+  formatLinks: function(selector){
     var links = $(selector);
     links.each(function(index, link){
       $(link).attr("target", "_blank");

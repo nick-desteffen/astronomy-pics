@@ -13,4 +13,5 @@
   <div id="image"></div>
   <div id="image_credit"></div>
   <div id="explanation"></div>
+  <a id="download" class="btn" download="" href="">Download</a>
 </div>
