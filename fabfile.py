@@ -1,8 +1,9 @@
+import os
 from fabric.api import *
 
-env.user = 'nickd'
+env.user = os.environ['USER']
 env.hosts = ['astronomypics.net']
-env.key_filename = ["/Users/nickd/.ssh/id_rsa"]
+env.key_filename = [os.environ['HOME'] + "/.ssh/id_rsa"]
 
 def deploy():
   path = '/var/www/apps/astronomy-pics'

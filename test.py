@@ -16,4 +16,3 @@ print apod.slug
 print apod.votes
 print apod.image_credit
 print apod.explanation
-
