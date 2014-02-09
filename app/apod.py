@@ -67,6 +67,10 @@ class Apod:
       low_res_image_path = centers[0].iframe.get("src")
       high_res_image_path = centers[0].iframe.get("src")
       type = 'video'
+    elif len(centers[0].find_all("object")) > 0:
+      low_res_image_path = centers[0].object.get("data")
+      high_res_image_path = centers[0].object.get("data")
+      type = 'flash'
     else:
       high_res_image_path = base_image_url + soup.find_all("a")[1].get("href")
       low_res_image_path = base_image_url + soup.find_all('img')[0].get("src")

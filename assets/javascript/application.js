@@ -66,6 +66,9 @@ Apod.View = Backbone.View.extend({
         if (!$("#download").is(":visible")){ $("#download").show() }
         $("#download").attr("href", view.currentApod.get('high_res_image_path'));
         $("#download").attr("download", view.currentApod.get("slug"));
+      } else if (view.currentApod.get('type') == "flash") {
+        $("#download").hide();
+        $("#image").html('<object type="application/x-shockwave-flash" data="http://apod.nasa.gov/apod/' + view.currentApod.get('low_res_image_path') + '" width="960" height="540"><param name="movie" value="http://apod.nasa.gov/apod/' + view.currentApod.get('low_res_image_path') + '" /></object>')
       } else {
         $("#download").hide();
         $("#image").html('<iframe width="960" height="720" src="' + view.currentApod.get('low_res_image_path') + '" frameborder="0" allowfullscreen></iframe>');
