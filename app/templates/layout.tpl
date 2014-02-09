@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="Nick DeSteffen">
+    <meta name="google-site-verification" content="m3Rk_S9iv81Ha1ESS9BFA8UHbtzE2Z7m3DV0U0tR-yI" />
 
     <link href="/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="/assets/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css" />
