@@ -129,15 +129,19 @@ Apod.View = Backbone.View.extend({
 
   formatLinks: function(selector){
     var links = $(selector);
+    _this = this;
     links.each(function(index, link){
       var href = $(link).attr("href");
-      if (href != undefined && !href.match("^http")) {
-        var date = href.match(/\d+/g)[0];
-        $(link).attr("href", date);
-        $(link).addClass("exp-link");
-      } else {
-        $(link).attr("target", "_blank");
+      if (href != undefined && !href.match(/http/)) {
+        var date = href.match(/\d+/g)
+        if ((date == undefined) || (moment(date[0], _this.dateFormat).diff(moment(_this.firstApod), 'days') < 1)) {
+          $(link).attr("href", "http://apod.nasa.gov/apod/" + href);
+        } else {
+          $(link).attr("href", date[0]);
+          $(link).addClass("exp-link");
+        }
       }
+      $(link).attr("target", "_blank");
     });
   },
 
