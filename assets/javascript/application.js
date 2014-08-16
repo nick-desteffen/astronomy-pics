@@ -36,6 +36,7 @@ Apod.View = Backbone.View.extend({
   currentApod: null,
   router: null,
   firstApod: new Date(1996, 0, 8), // 6/16/1995 is the oldest, but anything prior to 1/9/1996 is a different format.
+  dateFormat: "YYMMDD",
 
   events: {
     "click .next"     : "nextApod",
@@ -155,7 +156,7 @@ Apod.View = Backbone.View.extend({
   },
 
   param: function(){
-    return this.currentDate.format("YYMMDD");
+    return this.currentDate.format(this.dateFormat);
   },
 
   storedVote: function(){
@@ -196,7 +197,8 @@ Apod.View = Backbone.View.extend({
   navigateExplanationLink: function(event){
     event.preventDefault();
     var date = $(event.target).attr("href");
-    this.refresh(date);
+    this.currentDate = moment(date, this.dateFormat);
+    this.router.navigate(this.param(), {trigger: true});
   }
 
 });
