@@ -132,7 +132,7 @@ Apod.View = Backbone.View.extend({
     _this = this;
     links.each(function(index, link){
       var href = $(link).attr("href");
-      if (href != undefined && !href.match(/http/)) {
+      if (href != undefined && !href.match(/http/) && !href.match(/ftp/)) {
         var date = /ap(\d+).html/g.exec(href)
         if ((date == undefined) || (moment(_(date).last(), _this.dateFormat).diff(moment(_this.firstApod), 'days') < 1)) {
           $(link).attr("href", "http://apod.nasa.gov/apod/" + href);
