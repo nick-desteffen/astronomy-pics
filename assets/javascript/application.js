@@ -41,7 +41,8 @@ Apod.View = Backbone.View.extend({
     "click .next"     : "nextApod",
     "click .previous" : "previousApod",
     "click #rating"   : "vote",
-    "click #random"   : "random"
+    "click #random"   : "random",
+    "click .exp-link" : "navigateExplanationLink"
   },
 
   initialize: function () {
@@ -128,10 +129,13 @@ Apod.View = Backbone.View.extend({
   formatLinks: function(selector){
     var links = $(selector);
     links.each(function(index, link){
-      $(link).attr("target", "_blank");
       var href = $(link).attr("href");
       if (href != undefined && !href.match("^http")) {
-        $(link).attr("href", "http://apod.nasa.gov/apod/" + href);
+        var date = href.match(/\d+/g)[0];
+        $(link).attr("href", date);
+        $(link).addClass("exp-link");
+      } else {
+        $(link).attr("target", "_blank");
       }
     });
   },
@@ -187,6 +191,12 @@ Apod.View = Backbone.View.extend({
       view.currentDate = moment($("#datepicker").val());
       view.router.navigate(view.param(), {trigger: true});
     });
+  },
+
+  navigateExplanationLink: function(event){
+    event.preventDefault();
+    var date = $(event.target).attr("href");
+    this.refresh(date);
   }
 
 });
