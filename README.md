@@ -10,13 +10,19 @@ Adds additional functionality such as:
 
 ## Setup:
  ```bash
-brew install pyenv
-pyenv install 2.7.6
+brew install easyenv
+easy`
 pip install -r requirements.txt
+* `sudo pip install beautifulsoup4`
+* `sudo pip install bottle`
+* `sudo pip install fabric`
+
+## Running:
+```bash
+python main.py
 ```
 
-## To run:
-`python main.py`
-
-## To deploy:
-`fab deploy`
+## Deploy:
+```bash
+fab deploy
+```
