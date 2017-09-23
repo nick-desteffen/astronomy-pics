@@ -8,12 +8,12 @@ Adds additional functionality such as:
 * datepicker
 * quick download
 
-## Python Dependencies:
-* `sudo easy_install pip`
-* `sudo pip install pymongo`
-* `sudo pip install beautifulsoup4`
-* `sudo pip install bottle`
-* `sudo pip install fabric`
+## Setup:
+ ```bash
+brew install pyenv
+pyenv install 2.7.6
+pip install -r requirements.txt
+```
 
 ## To run:
 `python main.py`
