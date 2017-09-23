@@ -10,12 +10,10 @@ Adds additional functionality such as:
 
 ## Setup:
  ```bash
-brew install easyenv
-easy`
+brew install pyenv
+pyenv install 2.7.6
 pip install -r requirements.txt
-* `sudo pip install beautifulsoup4`
-* `sudo pip install bottle`
-* `sudo pip install fabric`
+```
 
 ## Running:
 ```bash
