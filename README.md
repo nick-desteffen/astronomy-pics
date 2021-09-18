@@ -1,5 +1,5 @@
 # astronomypics.net
-Scrapes data from [Astronomy Picture of the Day](http://apod.nasa.gov/apod/astropix.html), stores it in [MongoDB](http://www.mongodb.org/), and presents it in a more usable form using [Backbone.js](http://backbonejs.org).  [Bottle](http://bottlepy.org/) is the Python web framework used.  
+Scrapes data from [Astronomy Picture of the Day](http://apod.nasa.gov/apod/astropix.html), stores it in [MongoDB](http://www.mongodb.org/), and presents it in a more usable form using [Backbone.js](http://backbonejs.org).  [Bottle](http://bottlepy.org/) is the Python web framework used.
 
 Adds additional functionality such as:
 
@@ -11,8 +11,8 @@ Adds additional functionality such as:
 ## Setup:
  ```bash
 brew install pyenv
-pyenv install 2.7.6
-pip install -r requirements.txt
+pyenv install 3.8.12
+pyenv exec pip install -r requirements.txt
 ```
 
 ## Running:

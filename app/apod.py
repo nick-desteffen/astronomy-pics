@@ -1,7 +1,7 @@
 import pymongo
-from pymongo import Connection
+from pymongo import MongoClient
 from bs4 import BeautifulSoup
-import urllib
+import requests
 import re
 import datetime
 
@@ -38,8 +38,8 @@ class Apod:
 
   def scrape_apod(self, date):
     url = "http://apod.nasa.gov/apod/ap%s.html" % (date)
-    page = urllib.urlopen(url)
-    html = page.read()
+    page = requests.get(url)
+    html = page.content.decode('utf-8')
 
     ## Repair markup
     start_indexes = []
@@ -53,7 +53,7 @@ class Apod:
       html = html[:(index + 2)] + "/" + html[(index + 2):]
 
     ## Parse HTML and break out pieces
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, features="html.parser")
     centers = soup.find_all('center')
     paragraphs = soup.find_all('p')
 
@@ -84,7 +84,7 @@ class Apod:
     if not centers[1].b == None:
       centers[1].b.unwrap() ## Remove other bold tags
 
-    image_credit = centers[1].renderContents()
+    image_credit = centers[1].renderContents().decode('utf-8', 'ignore')
     image_credit = re.sub("<br>", "", image_credit) ## Remove line breaks
     image_credit = re.sub("</br>", "", image_credit)
 
@@ -111,7 +111,7 @@ class Apod:
     return apod
 
   def collection(self):
-    connection = Connection('localhost', 27017)
+    connection = MongoClient('localhost', 27017)
 
     database = connection.astronomy_pics
     apod_collection = database.apod

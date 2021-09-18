@@ -1,6 +1,6 @@
 import os
 from bottle import TEMPLATE_PATH, route, static_file, template, install, request
-from apod import Apod
+from app.apod import Apod
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -24,7 +24,7 @@ def apod(date):
     "image_credit":        apod.image_credit,
     "low_res_image_path":  apod.low_res_image_path,
     "high_res_image_path": apod.high_res_image_path,
-    "explanation":         apod.explanation,
+    "explanation":         apod.explanation.decode('utf-8', 'ignore'),
     "date":                apod.date,
     "slug":                apod.slug,
     "votes":               apod.votes,
