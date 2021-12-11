@@ -58,7 +58,7 @@ class Apod:
     paragraphs = soup.find_all('p')
 
     ## Find the image or video paths
-    base_image_url = "http://apod.nasa.gov/apod/"
+    base_image_url = "//apod.nasa.gov/apod/"
     if len(centers[0].find_all("img")) > 0:
       high_res_image_path = base_image_url + centers[0].find_all("a")[1].get("href")
       low_res_image_path = base_image_url + centers[0].img.get("src")
